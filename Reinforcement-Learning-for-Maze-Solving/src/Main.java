@@ -4,8 +4,8 @@ import javax.swing.border.Border;
 
 import java.awt.event.*;
 
-public class Main{
-
+public class Main
+{
     public static void main(String s[])
     {
         JFrame frame = new JFrame("Reinforcement-Learning-for-Maze-Solving");
@@ -37,27 +37,66 @@ public class Main{
 
 class Canvas extends JPanel
 {
-    int wielkosc=20;
+    int timesExitFoud =0;
+    int steps =0;
+    int size=10;
     int squareSize = 25;
-    int[][] lattice = new int[wielkosc][wielkosc];  // lattice=0 => puste   lattice=1 => czastka
+    int[][] maze = new int[size][size];
     boolean simulate=false;
+    Agent agent = new Agent(0,0,size,size);
     public Canvas()
     {
-        lattice[5][10] =1;
+        for(int i=0;i<6;i++) maze[i][3]=1;
+        maze[size-1][size-1] = 2;
     }
 
     public Dimension getPreferredSize()
     {
-        return new Dimension(wielkosc*squareSize,wielkosc*squareSize);
+        return new Dimension(size*squareSize,size*squareSize);
     }
     void step()
     {
-        for(int x = 0; x<wielkosc; x++)
+        int xPos = agent.getPosX();
+        int yPos = agent.getPosY();
+        int chosenAction = agent.chooseAction();
+        switch(chosenAction)
         {
-            for(int y = 0; y<wielkosc; y++)
-            {
+            case 0:
+                //left
+                xPos--;
+                break;
+            case 1:
+                //up
+                yPos++;
+                break;
+            case 2:
+                //right
+                xPos++;
+                break;
+            case 3:
+                //down
+                yPos--;
+                break;
+            default:
+                System.out.println("Something went wrong");
+                break;
+        }
+        steps++;
+        if(xPos<0 || xPos>=maze.length || yPos<0 || yPos>=maze[0].length || maze[xPos][yPos] == 1)//hit wall
+        {
+            agent.giveReward(-1,chosenAction,agent.getPosX(),agent.getPosY());
+        }
+        else if(maze[xPos][yPos]==2)//end of maze
+        {
+            agent.giveReward(100,chosenAction,0,0);
+            timesExitFoud++;
 
-            }
+            System.out.println("Yay, you found exit "+timesExitFoud + " times, after "+steps+" steps! ");
+            steps=0;
+        }
+        else
+        {
+            agent.giveReward(0,chosenAction,xPos,yPos);
         }
     }
 
@@ -65,27 +104,35 @@ class Canvas extends JPanel
 
         super.paintComponent(g);
 
-        for (int i = 0; i < wielkosc; i++)
+        for (int i = 0; i < maze.length; i++)
         {
-            for (int j = 0; j < wielkosc; j++)
+            for (int j = 0; j < maze[0].length; j++)
             {
-                if (lattice[i][j] == 1)
+                if (maze[i][j] == 1)
                 {
                     g.setColor(new Color(0,0,0));
                     g.fillRect(i*squareSize, j*squareSize, squareSize, squareSize);
                 }
+                if (maze[i][j] == 2)
+                {
+                    g.setColor(new Color(0,255,0));
+                    g.fillRect(i*squareSize, j*squareSize, squareSize, squareSize);
+                }
             }
         }
+        g.setColor(new Color(255,0,0));
+        g.fillRect(agent.getPosX()*squareSize, agent.getPosY()*squareSize, squareSize, squareSize);
 
         if (simulate)
         {
             step();
+            /*
             try
             {
-                Thread.sleep(16);
+                Thread.sleep(10);
             }
             catch (InterruptedException t){}
-
+            */
             repaint();
         }
     }
