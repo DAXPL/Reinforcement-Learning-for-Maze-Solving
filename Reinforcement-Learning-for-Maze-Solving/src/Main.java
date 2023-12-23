@@ -3,6 +3,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Main
 {
@@ -39,13 +42,42 @@ class Canvas extends JPanel
 {
     int squareSize = 30;
     boolean simulate=false;
+    boolean logValues = false;
 
-    Maze maze = new Maze(35);
-    Agent[] agents = new Agent[1];
+    Maze maze = new Maze(15);
+    Agent[] agents = new Agent[10];
 
+    FileWriter outFile;
+    PrintWriter out;
     public Canvas()
     {
-        for(int i=0;i<agents.length;i++)agents[i] = new Agent(0,0,maze.GetSizeX(),maze.GetSizeY());
+        try
+        {
+            outFile = new FileWriter("AgentData.txt");
+            out = new PrintWriter(outFile);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        for(int i=0;i<agents.length;i++)
+        {
+            agents[i] = new Agent(0,0,maze.GetSizeX(),maze.GetSizeY(),i);
+            System.out.println(agents[i].GetAgentData());
+            if(logValues)out.println(agents[i].GetAgentData());
+        }
+        out.close();
+
+        try
+        {
+            outFile = new FileWriter("data.txt");
+            out = new PrintWriter(outFile);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public Dimension getPreferredSize()
@@ -87,6 +119,8 @@ class Canvas extends JPanel
         else if(maze.GetValue(xPos,yPos)==2)//end of maze
         {
             a.giveReward(100,chosenAction,0,0);
+            if(logValues)out.println(a.ReportSuccess());
+            else a.ReportSuccess();
         }
         else
         {
