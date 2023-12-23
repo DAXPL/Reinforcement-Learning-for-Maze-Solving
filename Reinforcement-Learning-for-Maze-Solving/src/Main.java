@@ -1,4 +1,5 @@
 import java .awt.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -6,12 +7,16 @@ import java.awt.event.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main
 {
     public static void main(String s[])
     {
         JFrame frame = new JFrame("Reinforcement-Learning-for-Maze-Solving");
+        frame.setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage("carrot.png"));
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         Canvas canvas = new Canvas();
@@ -43,10 +48,10 @@ public class Main
 
         panel.add(button2);
 
-        panel.setBackground(Color.black);
+        panel.setBackground(new Color(59,122,87));
         panel.add(canvas);
         frame.add(panel);
-        frame.setSize(800, 600);
+        frame.setSize(1000, 1000);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -55,18 +60,31 @@ public class Main
 
 class Canvas extends JPanel
 {
-    int squareSize = 30;
+    int squareSize = 35;
     boolean simulate=false;
     boolean logValues = false;
     boolean slowmotion = false;
 
-    Maze maze = new Maze(15);
+    Maze maze = new Maze(25);
     Agent[] agents = new Agent[10];
 
     FileWriter outFile;
     PrintWriter out;
+
+    private BufferedImage carrotImage;
+    private BufferedImage[] kicajceImages = new BufferedImage[4];
+    Color bgColor = new Color(59,122,87);
     public Canvas()
     {
+        try
+        {
+            carrotImage = ImageIO.read(new File("carrot.png"));
+            kicajceImages[0] = ImageIO.read(new File("BabyKicajec0.png"));
+            kicajceImages[1] = ImageIO.read(new File("BabyKicajec1.png"));
+            kicajceImages[2] = ImageIO.read(new File("BabyKicajec2.png"));
+            kicajceImages[3] = ImageIO.read(new File("BabyKicajec3.png"));
+        } catch (IOException ex) { }
+
         try
         {
             outFile = new FileWriter("AgentData.txt");
@@ -159,13 +177,12 @@ class Canvas extends JPanel
             {
                 if (maze.GetValue(i,j) == 1)
                 {
-                    g.setColor(new Color(0,0,0));
+                    g.setColor(bgColor);
                     g.fillRect(i*squareSize, j*squareSize, squareSize, squareSize);
                 }
                 else if (maze.GetValue(i,j) == 2)
                 {
-                    g.setColor(new Color(0,255,0));
-                    g.fillRect(i*squareSize, j*squareSize, squareSize, squareSize);
+                    g.drawImage(carrotImage, i*squareSize, j*squareSize,squareSize, squareSize,this);
                 }
             }
         }
@@ -173,9 +190,8 @@ class Canvas extends JPanel
 
         for(int i=0;i<agents.length;i++)
         {
-            g.fillRect(agents[i].getPosX()*squareSize, agents[i].getPosY()*squareSize, squareSize, squareSize);
+            g.drawImage(kicajceImages[i%4], agents[i].getPosX()*squareSize, agents[i].getPosY()*squareSize,squareSize, squareSize,this);
         }
-
         if (simulate)
         {
             for(int i=0;i<agents.length;i++)
