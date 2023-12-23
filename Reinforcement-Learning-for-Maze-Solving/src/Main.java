@@ -37,22 +37,20 @@ public class Main
 
 class Canvas extends JPanel
 {
-    int size=15;
     int squareSize = 30;
-    int[][] maze = new int[size][size];
     boolean simulate=false;
-    Agent[] agents = new Agent[10];
+
+    Maze maze = new Maze(35);
+    Agent[] agents = new Agent[1];
+
     public Canvas()
     {
-        for(int i=0;i<6;i++) maze[i][3]=1;
-        maze[size-1][size-1] = 2;
-
-        for(int i=0;i<agents.length;i++)agents[i] = new Agent(0,0,size,size);
+        for(int i=0;i<agents.length;i++)agents[i] = new Agent(0,0,maze.GetSizeX(),maze.GetSizeY());
     }
 
     public Dimension getPreferredSize()
     {
-        return new Dimension(size*squareSize,size*squareSize);
+        return new Dimension(maze.GetSizeX()*squareSize,maze.GetSizeY()*squareSize);
     }
     void step(Agent a)
     {
@@ -82,11 +80,11 @@ class Canvas extends JPanel
                 break;
         }
 
-        if(xPos<0 || xPos>=maze.length || yPos<0 || yPos>=maze[0].length || maze[xPos][yPos] == 1)//hit wall
+        if(xPos<0 || xPos>=maze.GetSizeX() || yPos<0 || yPos>=maze.GetSizeY() || maze.GetValue(xPos,yPos) == 1)//hit wall
         {
             a.giveReward(-1,chosenAction,a.getPosX(),a.getPosY());
         }
-        else if(maze[xPos][yPos]==2)//end of maze
+        else if(maze.GetValue(xPos,yPos)==2)//end of maze
         {
             a.giveReward(100,chosenAction,0,0);
         }
@@ -100,16 +98,16 @@ class Canvas extends JPanel
 
         super.paintComponent(g);
 
-        for (int i = 0; i < maze.length; i++)
+        for (int i = 0; i < maze.GetSizeX(); i++)
         {
-            for (int j = 0; j < maze[0].length; j++)
+            for (int j = 0; j < maze.GetSizeY(); j++)
             {
-                if (maze[i][j] == 1)
+                if (maze.GetValue(i,j) == 1)
                 {
                     g.setColor(new Color(0,0,0));
                     g.fillRect(i*squareSize, j*squareSize, squareSize, squareSize);
                 }
-                if (maze[i][j] == 2)
+                else if (maze.GetValue(i,j) == 2)
                 {
                     g.setColor(new Color(0,255,0));
                     g.fillRect(i*squareSize, j*squareSize, squareSize, squareSize);

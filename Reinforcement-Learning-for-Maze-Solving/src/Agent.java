@@ -55,7 +55,6 @@ public class Agent
         //Q-Learning: prevQ= Q(t-1)+a(r+ y* max(Q) - prevQ)
         states[posX][posY].qValues[action] = prevQ+a*(reward + y* maxQ - prevQ);
 
-
         posX = newX;
         posY = newY;
         if(reward == 100)
