@@ -30,11 +30,11 @@ public class State
     {
         double bestValue = -100;
 
-        for(int i=0; i<qValues.length; i++)
+        for (double qValue : qValues)
         {
-            if(qValues[i]>bestValue)
+            if (qValue > bestValue)
             {
-                bestValue=qValues[i];
+                bestValue = qValue;
             }
         }
 

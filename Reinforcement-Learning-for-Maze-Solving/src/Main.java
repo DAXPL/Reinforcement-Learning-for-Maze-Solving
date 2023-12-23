@@ -25,7 +25,7 @@ public class Main
         });
 
         panel.add(button);
-        panel.setBackground(Color.blue);
+        panel.setBackground(Color.black);
         panel.add(canvas);
         frame.add(panel);
         frame.setSize(800, 600);
@@ -37,28 +37,28 @@ public class Main
 
 class Canvas extends JPanel
 {
-    int timesExitFoud =0;
-    int steps =0;
-    int size=10;
-    int squareSize = 25;
+    int size=15;
+    int squareSize = 30;
     int[][] maze = new int[size][size];
     boolean simulate=false;
-    Agent agent = new Agent(0,0,size,size);
+    Agent[] agents = new Agent[10];
     public Canvas()
     {
         for(int i=0;i<6;i++) maze[i][3]=1;
         maze[size-1][size-1] = 2;
+
+        for(int i=0;i<agents.length;i++)agents[i] = new Agent(0,0,size,size);
     }
 
     public Dimension getPreferredSize()
     {
         return new Dimension(size*squareSize,size*squareSize);
     }
-    void step()
+    void step(Agent a)
     {
-        int xPos = agent.getPosX();
-        int yPos = agent.getPosY();
-        int chosenAction = agent.chooseAction();
+        int xPos = a.getPosX();
+        int yPos = a.getPosY();
+        int chosenAction = a.chooseAction();
         switch(chosenAction)
         {
             case 0:
@@ -81,22 +81,18 @@ class Canvas extends JPanel
                 System.out.println("Something went wrong");
                 break;
         }
-        steps++;
+
         if(xPos<0 || xPos>=maze.length || yPos<0 || yPos>=maze[0].length || maze[xPos][yPos] == 1)//hit wall
         {
-            agent.giveReward(-1,chosenAction,agent.getPosX(),agent.getPosY());
+            a.giveReward(-1,chosenAction,a.getPosX(),a.getPosY());
         }
         else if(maze[xPos][yPos]==2)//end of maze
         {
-            agent.giveReward(100,chosenAction,0,0);
-            timesExitFoud++;
-
-            System.out.println("Yay, you found exit "+timesExitFoud + " times, after "+steps+" steps! ");
-            steps=0;
+            a.giveReward(100,chosenAction,0,0);
         }
         else
         {
-            agent.giveReward(0,chosenAction,xPos,yPos);
+            a.giveReward(0,chosenAction,xPos,yPos);
         }
     }
 
@@ -121,11 +117,19 @@ class Canvas extends JPanel
             }
         }
         g.setColor(new Color(255,0,0));
-        g.fillRect(agent.getPosX()*squareSize, agent.getPosY()*squareSize, squareSize, squareSize);
+
+        for(int i=0;i<agents.length;i++)
+        {
+            g.fillRect(agents[i].getPosX()*squareSize, agents[i].getPosY()*squareSize, squareSize, squareSize);
+        }
 
         if (simulate)
         {
-            step();
+            for(int i=0;i<agents.length;i++)
+            {
+                step(agents[i]);
+            }
+
             /*
             try
             {
