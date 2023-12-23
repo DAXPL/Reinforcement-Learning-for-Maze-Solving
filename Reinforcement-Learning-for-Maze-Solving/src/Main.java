@@ -15,6 +15,7 @@ public class Main
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         Canvas canvas = new Canvas();
+
         JButton button = new JButton();
         button.setText("START");
         button.addActionListener(new ActionListener()
@@ -28,6 +29,20 @@ public class Main
         });
 
         panel.add(button);
+
+        JButton button2 = new JButton();
+        button2.setText("Slowmotion");
+        button2.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent arg0)
+            {
+                canvas.ToggleSlowmotion();
+            }
+        });
+
+        panel.add(button2);
+
         panel.setBackground(Color.black);
         panel.add(canvas);
         frame.add(panel);
@@ -43,6 +58,7 @@ class Canvas extends JPanel
     int squareSize = 30;
     boolean simulate=false;
     boolean logValues = false;
+    boolean slowmotion = false;
 
     Maze maze = new Maze(15);
     Agent[] agents = new Agent[10];
@@ -128,6 +144,11 @@ class Canvas extends JPanel
         }
     }
 
+    public void ToggleSlowmotion()
+    {
+        slowmotion =!slowmotion;
+    }
+
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
@@ -162,13 +183,15 @@ class Canvas extends JPanel
                 step(agents[i]);
             }
 
-            /*
-            try
+            if(slowmotion)
             {
-                Thread.sleep(10);
+                try
+                {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException t){}
             }
-            catch (InterruptedException t){}
-            */
+
             repaint();
         }
     }
