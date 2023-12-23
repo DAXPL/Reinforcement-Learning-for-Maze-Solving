@@ -1,6 +1,7 @@
 import java.util.HashMap;
 public class Agent
 {
+    private int agentID;
     private int posX = 0;
     private int posY=0;
 
@@ -12,10 +13,11 @@ public class Agent
     private int timesExitFoud =0;
     private int steps =0;
 
-    public Agent(int x, int y, int sizeX, int sizeY)
+    public Agent(int pX, int pY, int sizeX, int sizeY, int ID)
     {
-        posX = x;
-        posY = y;
+        agentID = ID;
+        posX = pX;
+        posY = pY;
         states= new State[sizeX][sizeY];
         for (int i = 0; i < sizeX; i++)
         {
@@ -24,6 +26,14 @@ public class Agent
                 states[i][j] = new State();
             }
         }
+
+        epsilon = 0.75 + Math.random() * (0.75 - 0.5);
+        a = 0.05 + Math.random() * (0.5 - 0.05);
+        y = 0.5 + Math.random() * (0.99 - 0.5 );
+    }
+    public String GetAgentData()
+    {
+        return agentID+";"+epsilon+";"+a+";"+y;
     }
     public int chooseAction()
     {
@@ -57,11 +67,13 @@ public class Agent
 
         posX = newX;
         posY = newY;
-        if(reward == 100)
-        {
-            timesExitFoud++;
-            System.out.println("Yay, you found exit in "+steps + "steps, in total"+timesExitFoud+" times" );
-            steps=0;
-        }
+    }
+    public String ReportSuccess()
+    {
+        this.timesExitFoud++;
+        String raport = agentID+";"+timesExitFoud+";"+steps;
+        System.out.println("Yay, agent "+agentID+" found exit in "+steps + "steps, in total "+timesExitFoud+" times" );
+        this.steps=0;
+        return raport;
     }
 }
