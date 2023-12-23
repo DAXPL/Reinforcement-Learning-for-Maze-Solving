@@ -1,12 +1,13 @@
 # Reinforcement-Learning for Maze Solving
 ![Screenshot1](carrot.png)
+<br />
 Projekt ten stanowi implementację agenta uczenia ze wzmacnianiem, który zdobywa umiejętność rozwiązywania labiryntu przy użyciu algorytmu Q-learning. Dodatkowo, zawiera również generator labiryntów, który tworzy zróżnicowane trasy do eksploracji przez agenta.
 
 ## 🚀 Czym Jest Reinforcement Learning?
 
 Reinforcement Learning, czyli uczenie ze wzmacnianiem, to koncepcja z dziedziny sztucznej inteligencji, gdzie agent uczony jest podejmować decyzje w dynamicznym środowisku. Kluczowym elementem jest to, że agent zdobywa doświadczenie, interakcjonując z otoczeniem, i otrzymuje informację zwrotną w postaci nagród lub kar.
 
-### Kluczowe Elementy RL:
+### 👾 Kluczowe Elementy RL:
 
 - **Agent:** To podmiot, który podejmuje decyzje w środowisku, starając się maksymalizować zdyskontowaną sumę nagród.
 
@@ -22,11 +23,11 @@ Reinforcement Learning, czyli uczenie ze wzmacnianiem, to koncepcja z dziedziny 
 
 - **Exploration vs. Exploitation:** Agent musi zbalansować eksplorację nowych działań i eksploatację już znanego, aby osiągnąć optymalne wyniki.
 
-### Dlaczego To Ważne?
+### 🔍 Dlaczego To Ważne?
 
 Reinforcement Learning ma szerokie zastosowanie, od sterowania robotami po automatyczne podejmowanie decyzji w grach komputerowych. To narzędzie umożliwia agentom samodzielne doskonalenie strategii, poprzez interakcję z otoczeniem.
 
-## Generowanie Labiryntów
+## 📎 Generowanie Labiryntów
 
 Projekt wykorzystuje algorytm "recursive backtracking" do generowania labiryntów w formie tablicy 2D. Każda tablica reprezentuje unikalny labirynt, gdzie:
 - 1: Ściana
@@ -34,8 +35,10 @@ Projekt wykorzystuje algorytm "recursive backtracking" do generowania labiryntó
 - 2: Koniec labiryntu
 - 3: Początek labiryntu
 
-## Zrzuty Ekranu
+## 📸 Zrzuty Ekranu
 
-## Autor
+## 👩🏽‍💻🧑🏽‍💻 Autorzy
 
-Autor: Miłosz Klim, Wydział Fizyki, Technologie Komputerowe semestr V, 2023
+Kod: Miłosz Klim, Wydział Fizyki, Technologie Komputerowe semestr V
+Grafika: Wiktoria Bielecka, Wydział Fizyki, Technologie Komputerowe semestr V
+Grudzień 2023
