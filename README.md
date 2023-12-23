@@ -39,6 +39,6 @@ Projekt wykorzystuje algorytm "recursive backtracking" do generowania labiryntó
 
 ## 👩🏽‍💻🧑🏽‍💻 Autorzy
 
-Kod: Miłosz Klim, Wydział Fizyki, Technologie Komputerowe semestr V
-Grafika: Wiktoria Bielecka, Wydział Fizyki, Technologie Komputerowe semestr V
+Kod: Miłosz Klim, Wydział Fizyki, Technologie Komputerowe semestr V<br />
+Grafika: Wiktoria Bielecka, Wydział Fizyki, Technologie Komputerowe semestr V<br />
 Grudzień 2023
