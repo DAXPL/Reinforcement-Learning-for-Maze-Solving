@@ -40,8 +40,8 @@ class Canvas extends JPanel
     int squareSize = 30;
     boolean simulate=false;
 
-    Maze maze = new Maze();
-    Agent[] agents = new Agent[10];
+    Maze maze = new Maze(35);
+    Agent[] agents = new Agent[1];
 
     public Canvas()
     {
