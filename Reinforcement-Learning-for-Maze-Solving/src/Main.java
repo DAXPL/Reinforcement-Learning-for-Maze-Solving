@@ -3,6 +3,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.event.*;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,15 +18,19 @@ public class Main
 {
     public static void main(String s[])
     {
+        int width = 1000;
+        int height = 1000;
+
         JFrame frame = new JFrame("Reinforcement-Learning-for-Maze-Solving");
         frame.setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage("carrot.png"));
+
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
-        Canvas canvas = new Canvas();
+        Canvas canvas = new Canvas(width,height);
 
-        JButton button = new JButton();
-        button.setText("START");
-        button.addActionListener(new ActionListener()
+        JButton startButton = new JButton();
+        startButton.setText("START");
+        startButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent arg0)
@@ -33,25 +40,59 @@ public class Main
             }
         });
 
-        panel.add(button);
+        panel.add(startButton);
 
-        JButton button2 = new JButton();
-        button2.setText("Slowmotion");
-        button2.addActionListener(new ActionListener()
+        JSlider speedSlider  = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        JLabel labelSpeedSlider = new JLabel("Delay = " + speedSlider.getValue() + "ms");
+        speedSlider.addChangeListener(new ChangeListener()
         {
-            @Override
-            public void actionPerformed(ActionEvent arg0)
+            public void stateChanged(ChangeEvent e)
             {
-                canvas.ToggleSlowmotion();
+                labelSpeedSlider.setText("Delay = " + speedSlider.getValue() + "ms");
+                canvas.SetSimulationSpeed(speedSlider.getValue());
             }
         });
 
-        panel.add(button2);
+        panel.add(speedSlider);
+        panel.add(labelSpeedSlider);
+
+        JSlider agentsSlider  = new JSlider(JSlider.HORIZONTAL, 0, 50, 10);
+        JLabel labelAgents = new JLabel("Agents = " + agentsSlider.getValue());
+
+        JSlider mazeSlider  = new JSlider(JSlider.HORIZONTAL, 10, 100, 25);
+        JLabel labelMaze = new JLabel("Maze size = " + mazeSlider.getValue());
+
+        agentsSlider.addChangeListener(new ChangeListener()
+        {
+            public void stateChanged(ChangeEvent e)
+            {
+                labelAgents.setText("Agents = " + agentsSlider.getValue());
+                canvas.SetSimulationParams(mazeSlider.getValue(), agentsSlider.getValue(), width);
+            }
+        });
+
+        mazeSlider.addChangeListener(new ChangeListener()
+        {
+            public void stateChanged(ChangeEvent e)
+            {
+                labelMaze.setText("Maze size = " + mazeSlider.getValue());
+                canvas.SetSimulationParams(mazeSlider.getValue(), agentsSlider.getValue(), width);
+            }
+        });
+
+        panel.add(speedSlider);
+        panel.add(labelSpeedSlider);
+
+        panel.add(agentsSlider);
+        panel.add(labelAgents);
+
+        panel.add(mazeSlider);
+        panel.add(labelMaze);
 
         panel.setBackground(new Color(59,122,87));
         panel.add(canvas);
         frame.add(panel);
-        frame.setSize(1000, 1000);
+        frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -63,10 +104,10 @@ class Canvas extends JPanel
     int squareSize = 35;
     boolean simulate=false;
     boolean logValues = false;
-    boolean slowmotion = false;
+    int simulationSpeed = 0;
 
-    Maze maze = new Maze(25);
-    Agent[] agents = new Agent[10];
+    Maze maze;
+    Agent[] agents;
 
     FileWriter outFile;
     PrintWriter out;
@@ -74,7 +115,7 @@ class Canvas extends JPanel
     private BufferedImage carrotImage;
     private BufferedImage[] kicajceImages = new BufferedImage[4];
     Color bgColor = new Color(59,122,87);
-    public Canvas()
+    public Canvas(int w, int h)
     {
         try
         {
@@ -84,6 +125,17 @@ class Canvas extends JPanel
             kicajceImages[2] = ImageIO.read(new File("BabyKicajec2.png"));
             kicajceImages[3] = ImageIO.read(new File("BabyKicajec3.png"));
         } catch (IOException ex) { }
+
+        SetSimulationParams(5,10, w);
+    }
+
+    public void SetSimulationParams(int mazeSize, int agentsAmount, int w)
+    {
+        maze = new Maze(mazeSize);
+        agents = new Agent[agentsAmount];
+
+        squareSize = (int)(w/(mazeSize*1.1f));
+        System.out.println(squareSize);
 
         try
         {
@@ -116,10 +168,14 @@ class Canvas extends JPanel
 
     public Dimension getPreferredSize()
     {
+        if(maze == null) new Dimension(squareSize,squareSize);
+        assert maze != null;
         return new Dimension(maze.GetSizeX()*squareSize,maze.GetSizeY()*squareSize);
     }
     void step(Agent a)
     {
+        if(maze == null) return;
+
         int xPos = a.getPosX();
         int yPos = a.getPosY();
         int chosenAction = a.chooseAction();
@@ -162,15 +218,15 @@ class Canvas extends JPanel
         }
     }
 
-    public void ToggleSlowmotion()
+    public void SetSimulationSpeed(int v)
     {
-        slowmotion =!slowmotion;
+        simulationSpeed = v;
     }
 
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
-
+        if(maze == null) return;
         for (int i = 0; i < maze.GetSizeX(); i++)
         {
             for (int j = 0; j < maze.GetSizeY(); j++)
@@ -188,6 +244,7 @@ class Canvas extends JPanel
         }
         g.setColor(new Color(255,0,0));
 
+        if(agents == null) return;
         for(int i=0;i<agents.length;i++)
         {
             g.drawImage(kicajceImages[i%4], agents[i].getPosX()*squareSize, agents[i].getPosY()*squareSize,squareSize, squareSize,this);
@@ -199,14 +256,15 @@ class Canvas extends JPanel
                 step(agents[i]);
             }
 
-            if(slowmotion)
+            if(simulationSpeed > 0)
             {
                 try
                 {
-                    Thread.sleep(100);
+                    Thread.sleep(simulationSpeed);
                 }
                 catch (InterruptedException t){}
             }
+
 
             repaint();
         }
