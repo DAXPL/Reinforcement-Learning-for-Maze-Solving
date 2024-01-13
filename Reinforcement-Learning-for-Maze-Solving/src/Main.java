@@ -26,10 +26,21 @@ public class Main
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
-        Canvas canvas = new Canvas(width,height);
+
+        JSlider speedSlider  = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        JLabel labelSpeedSlider = new JLabel("Delay = " + speedSlider.getValue() + "ms");
+
+        JSlider agentsSlider  = new JSlider(JSlider.HORIZONTAL, 0, 50, 10);
+        JLabel labelAgents = new JLabel("Agents = " + agentsSlider.getValue());
+
+        JSlider mazeSlider  = new JSlider(JSlider.HORIZONTAL, 10, 100, 25);
+        JLabel labelMaze = new JLabel("Maze size = " + mazeSlider.getValue());
+
+        Canvas canvas = new Canvas(width,height,agentsSlider.getValue(),mazeSlider.getValue());
 
         JButton startButton = new JButton();
         startButton.setText("START");
+
         startButton.addActionListener(new ActionListener()
         {
             @Override
@@ -40,10 +51,6 @@ public class Main
             }
         });
 
-        panel.add(startButton);
-
-        JSlider speedSlider  = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
-        JLabel labelSpeedSlider = new JLabel("Delay = " + speedSlider.getValue() + "ms");
         speedSlider.addChangeListener(new ChangeListener()
         {
             public void stateChanged(ChangeEvent e)
@@ -52,15 +59,6 @@ public class Main
                 canvas.SetSimulationSpeed(speedSlider.getValue());
             }
         });
-
-        panel.add(speedSlider);
-        panel.add(labelSpeedSlider);
-
-        JSlider agentsSlider  = new JSlider(JSlider.HORIZONTAL, 0, 50, 10);
-        JLabel labelAgents = new JLabel("Agents = " + agentsSlider.getValue());
-
-        JSlider mazeSlider  = new JSlider(JSlider.HORIZONTAL, 10, 100, 25);
-        JLabel labelMaze = new JLabel("Maze size = " + mazeSlider.getValue());
 
         agentsSlider.addChangeListener(new ChangeListener()
         {
@@ -79,6 +77,10 @@ public class Main
                 canvas.SetSimulationParams(mazeSlider.getValue(), agentsSlider.getValue(), width);
             }
         });
+
+        panel.add(startButton);
+        panel.add(speedSlider);
+        panel.add(labelSpeedSlider);
 
         panel.add(speedSlider);
         panel.add(labelSpeedSlider);
@@ -115,18 +117,18 @@ class Canvas extends JPanel
     private BufferedImage carrotImage;
     private BufferedImage[] kicajceImages = new BufferedImage[4];
     Color bgColor = new Color(59,122,87);
-    public Canvas(int w, int h)
+    public Canvas(int w, int h, int agentsCout, int newMazeSize)
     {
         try
         {
-            carrotImage = ImageIO.read(new File("carrot.png"));
-            kicajceImages[0] = ImageIO.read(new File("BabyKicajec0.png"));
-            kicajceImages[1] = ImageIO.read(new File("BabyKicajec1.png"));
-            kicajceImages[2] = ImageIO.read(new File("BabyKicajec2.png"));
-            kicajceImages[3] = ImageIO.read(new File("BabyKicajec3.png"));
+            carrotImage = ImageIO.read(new File("gfx/carrot.png"));
+            kicajceImages[0] = ImageIO.read(new File("gfx/BabyKicajec0.png"));
+            kicajceImages[1] = ImageIO.read(new File("gfx/BabyKicajec1.png"));
+            kicajceImages[2] = ImageIO.read(new File("gfx/BabyKicajec2.png"));
+            kicajceImages[3] = ImageIO.read(new File("gfx/BabyKicajec3.png"));
         } catch (IOException ex) { }
 
-        SetSimulationParams(5,10, w);
+        SetSimulationParams(newMazeSize,agentsCout, w);
     }
 
     public void SetSimulationParams(int mazeSize, int agentsAmount, int w)

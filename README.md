@@ -1,5 +1,5 @@
 # Reinforcement-Learning for Maze Solving
-![Screenshot1](carrot.png)
+![Carrot](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/carrot.png)
 <br />
 Projekt ten stanowi implementację agenta uczenia ze wzmacnianiem, który zdobywa umiejętność rozwiązywania labiryntu przy użyciu algorytmu Q-learning. Dodatkowo, zawiera również generator labiryntów, który tworzy zróżnicowane trasy do eksploracji przez agenta.
 <br />
@@ -51,18 +51,10 @@ public class State
 
         for(int i=0; i<qValues.length; i++)
         {
-            if(qValues[i]>bestValue)
+            if(qValues[i] > bestValue || (qValues[i] == bestValue && (Math.random() > 0.5f)))
             {
                 bestAction=i;
                 bestValue=qValues[i];
-            }
-            else if (qValues[i] == bestValue)
-            {
-                if(Math.random() > 0.5f)
-                {
-                    bestAction=i;
-                    bestValue=qValues[i];
-                }
             }
         }
 
@@ -74,19 +66,22 @@ public class State
 
         for (double qValue : qValues)
         {
-            if (qValue > bestValue)
-            {
-                bestValue = qValue;
-            }
+            if (qValue > bestValue) bestValue = qValue;
         }
 
         return  bestValue;
     }
 };
 ```
+Każdy agent ma przypisywane te wartości w sposób losowy. Oscylują one wokół pewnych wartości uznanych za standardowe i przynoszące zadowalające rezultaty w każdym środowisku
+```java
+epsilon = 0.75 + Math.random() * (0.75 - 0.5);
+a = 0.05 + Math.random() * (0.5 - 0.05);
+y = 0.5 + Math.random() * (0.99 - 0.5 );
+```
 Agent, będąc w danym stanie, wybiera akcję do wykonania. Wybór ten może być zgodny z zasadą eksploatacji (wybieranie najlepszej znanej akcji) lub eksploracji (wybieranie losowej akcji w celu poszerzenia wiedzy agenta). Następnie agent wykonuje wybraną akcję, przechodząc do nowego stanu środowiska. Po wykonaniu akcji agent aktualizuje wartość Q zgodnie ze wzorem:
 
-![Wzór Q-learning](Q-learning-equation.svg)
+![Wzór Q-learning](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/Q-learning-equation.svg)
 
 - **Q(s, a)** to wartość Q dla stanu \( s \) i akcji \( a \),
 - **α** to współczynnik uczenia,
@@ -126,6 +121,10 @@ public int chooseAction()
     }
 ```
 Widać tutaj jak wartość ϵ bezpośrednio wpływa na czas jaki agent poświęca na zwiedzanie labiryntu, w stosunku do ślepego podążania za nagrodami.
+
+![Hare1](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/BabyKicajec0.png)
+![Hare2](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/BabyKicajec1.png)
+
 ## 📎 Generowanie Labiryntów
 
 Projekt wykorzystuje algorytm "recursive backtracking" do generowania labiryntów w formie tablicy 2D. Algorytm używa rekurencji do eksplorowania labiryntu. Punkty są wybierane losowo, a następnie odwiedzane sąsiednie punkty, usuwając ściany między nimi. Jeśli dany punkt nie ma dostępnych sąsiadów, algorytm wraca do poprzedniego punktu (backtrack), kontynuując proces.
