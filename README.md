@@ -1,5 +1,5 @@
 # Reinforcement-Learning for Maze Solving
-![Carrot](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/carrot.png)
+![Carrot](gfx/carrot.png)
 <br />
 Projekt ten stanowi implementację agenta uczenia ze wzmacnianiem, który zdobywa umiejętność rozwiązywania labiryntu przy użyciu algorytmu Q-learning. Dodatkowo, zawiera również generator labiryntów, który tworzy zróżnicowane trasy do eksploracji przez agenta.
 <br />
@@ -81,7 +81,7 @@ y = 0.5 + Math.random() * (0.99 - 0.5 );
 ```
 Agent, będąc w danym stanie, wybiera akcję do wykonania. Wybór ten może być zgodny z zasadą eksploatacji (wybieranie najlepszej znanej akcji) lub eksploracji (wybieranie losowej akcji w celu poszerzenia wiedzy agenta). Następnie agent wykonuje wybraną akcję, przechodząc do nowego stanu środowiska. Po wykonaniu akcji agent aktualizuje wartość Q zgodnie ze wzorem:
 
-![Wzór Q-learning](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/Q-learning-equation.svg)
+![Wzór Q-learning](gfx/Q-learning-equation.svg)
 
 - **Q(s, a)** to wartość Q dla stanu \( s \) i akcji \( a \),
 - **α** to współczynnik uczenia,
@@ -122,8 +122,8 @@ public int chooseAction()
 ```
 Widać tutaj jak wartość ϵ bezpośrednio wpływa na czas jaki agent poświęca na zwiedzanie labiryntu, w stosunku do ślepego podążania za nagrodami.
 
-![Hare1](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/BabyKicajec0.png)
-![Hare2](https://raw.githubusercontent.com/DAXPL/Reinforcement-Learning-for-Maze-Solving/main/BabyKicajec1.png)
+![Hare1](gfx/BabyKicajec0.png)
+![Hare2](gfx/BabyKicajec1.png)
 
 ## 📎 Generowanie Labiryntów
 
