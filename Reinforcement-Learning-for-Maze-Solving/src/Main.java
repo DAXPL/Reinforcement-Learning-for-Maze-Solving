@@ -21,6 +21,9 @@ public class Main
         int width = 1000;
         int height = 1000;
 
+        int defaultAgentsCount = 10;
+        int defaultMazeSize = 10;
+
         JFrame frame = new JFrame("Reinforcement-Learning-for-Maze-Solving");
         frame.setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage("carrot.png"));
 
@@ -30,10 +33,10 @@ public class Main
         JSlider speedSlider  = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
         JLabel labelSpeedSlider = new JLabel("Delay = " + speedSlider.getValue() + "ms");
 
-        JSlider agentsSlider  = new JSlider(JSlider.HORIZONTAL, 0, 50, 10);
+        JSlider agentsSlider  = new JSlider(JSlider.HORIZONTAL, 1, 50, defaultAgentsCount);
         JLabel labelAgents = new JLabel("Agents = " + agentsSlider.getValue());
 
-        JSlider mazeSlider  = new JSlider(JSlider.HORIZONTAL, 10, 100, 25);
+        JSlider mazeSlider  = new JSlider(JSlider.HORIZONTAL, 5, 100, defaultMazeSize);
         JLabel labelMaze = new JLabel("Maze size = " + mazeSlider.getValue());
 
         Canvas canvas = new Canvas(width,height,agentsSlider.getValue(),mazeSlider.getValue());
@@ -47,6 +50,8 @@ public class Main
             public void actionPerformed(ActionEvent arg0)
             {
                 canvas.simulate=!canvas.simulate;
+                agentsSlider.setEnabled(!canvas.simulate);
+                mazeSlider.setEnabled(!canvas.simulate);
                 canvas.repaint();
             }
         });
