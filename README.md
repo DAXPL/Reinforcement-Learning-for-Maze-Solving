@@ -11,7 +11,7 @@ Głównym celem projektu jest zaimplementowanie agenta zdolnego do samodzielnego
 
 ## 🚀 Czym Jest Reinforcement Learning?
 
-Reinforcement Learning, czyli uczenie ze wzmacnianiem, to koncepcja z dziedziny sztucznej inteligencji, gdzie agent uczony jest podejmować decyzje w dynamicznym środowisku. Kluczowym elementem jest to, że agent zdobywa doświadczenie, interakcjonując z otoczeniem, i otrzymuje informację zwrotną w postaci nagród lub kar.
+Reinforcement Learning, czyli uczenie ze wzmacnianiem, to koncepcja z dziedziny sztucznej inteligencji, gdzie agent uczony jest podejmować decyzje w dynamicznym środowisku. Kluczowym elementem jest to, że agent zdobywa doświadczenie, wchodząc w interakcje z otoczeniem, i otrzymuje informację zwrotną w postaci nagród lub kar.
 
 ### 👾 Słowiczek:
 
